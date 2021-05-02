@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ using Shop.Services;
 
 namespace Shop.Controllers
 {
-    [Route("v1/users/")]
+    [Route("v1/users")]
     public class UserController : ControllerBase
     {
 
-        [HttpPost]
+        [HttpGet]
         [Route("")]
         [Authorize(Roles = "manager")]
         public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context, [FromBody] User model)
@@ -28,8 +29,6 @@ namespace Shop.Controllers
 
             return users;
         }
-
-
 
         [HttpPost]
         [Route("")]
@@ -102,10 +101,6 @@ namespace Shop.Controllers
                 token = token
             };
         }
-
-
-
-
 
 
 
