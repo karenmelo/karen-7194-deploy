@@ -62,8 +62,8 @@ namespace Shop
 
             app.UseHttpsRedirection();
 
-            app.UseSwagger(); //cria documentação da api para que usuários se guiem ao usá-la
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop v1"));
+            //app.UseSwagger(); //cria documentação da api para que usuários se guiem ao usá-la
+            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop v1"));
 
             app.UseRouting();
 
