@@ -36,15 +36,21 @@ namespace Shop.Controllers
         //[Authorize(Roles="manager")] -> comentado pois se não tiver nenhum usuário cadastrado, logo não haverá manager para acessar e cadastrar.
         public async Task<ActionResult<User>> Post([FromServices] DataContext context, [FromBody] User model)
         {
+            //verifica se os dados são válidos
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {
+                //Força o usuário a ser sempre "funcionário"
+                model.Role = "employee";
+
                 context.Users.Add(model);
                 await context.SaveChangesAsync();
 
+                //deixando de exibir a senha quando retornar para a tela
+                model.Password = "";
                 return model;
 
             }
@@ -94,6 +100,10 @@ namespace Shop.Controllers
                 return NotFound(new { message = "Usuário ou senha inválidos." });
 
             var token = TokenSevice.GenerateToken(user);
+
+
+            //deixando de exibir a senha quando retornar para a tela
+            user.Password = "";
 
             return new
             {

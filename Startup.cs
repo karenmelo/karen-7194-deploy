@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shop.Data;
@@ -59,7 +52,7 @@ namespace Shop
             //documentação criada automaticamente quando é criada a webapi, mas pode ser add via pkg Swashbuckle.AspNetCore
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shop", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shop API", Version = "v1" });
             });
 
 
@@ -69,12 +62,12 @@ namespace Shop
             //injeção de dependência
             //aqui eu informei para nossa aplicação que tenho um DbContext
             //agora preciso deixar ele disponível para meus controllers o que pode ser chamado de injeção de dependência
-            // services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
-            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database")); //primeiro deploy foi com o InMemory
+            //services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
 
             //A API precisa ter suas conexões fechadas assim como outras aplicações
             //As formas de tratar essa dependência é via: AddScoped, AddTransient e AddSingleton
-            services.AddScoped<DataContext, DataContext>();
+            //services.AddScoped<DataContext, DataContext>(); // linha desnecessária pois o AddDbContext já faz esse papel
 
             #endregion
         }
@@ -86,13 +79,13 @@ namespace Shop
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop API v1"));
             }
 
             app.UseHttpsRedirection();
 
             app.UseSwagger(); //cria documentação da api para que usuários se guiem ao usá-la
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop API v1"));//Forma visual da documentação do swagger 
 
             app.UseRouting();
 
